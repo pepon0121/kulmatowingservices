@@ -276,24 +276,7 @@ Location: ${location || 'Not provided yet'}`;
     window.location.href = whatsappURL;
   }
 });
-  e.preventDefault();
-
-  const name = document.getElementById('customerName').value.trim();
-  const phone = document.getElementById('customerPhone').value.trim();
-  const service = document.getElementById('serviceNeeded').value;
-  const location = document.getElementById('locationLink').value.trim();
-
-  const message =
-`NEW TOWING REQUEST
-Name: ${name}
-Phone: ${phone}
-Service: ${service}
-Location: ${location || 'Not provided yet'}`;
-
-  const whatsappURL = 'https://wa.me/18133106432?text=' + encodeURIComponent(message);
-
-  window.open(whatsappURL, '_blank');
-});
+  
 
 
   // Interactive animation layer
