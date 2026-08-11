@@ -167,7 +167,47 @@ footer{background:#05070a;border-top:1px solid rgba(255,255,255,.1);padding:44px
       if(navigator.share){try{await navigator.share({title:'My towing location',text:'Here is my current location for towing service:',url:link});}catch(e){}}
     }, function(){status.style.display='block';status.textContent='Location permission denied. You can paste your address manually.';}, {enableHighAccuracy:true,timeout:12000,maximumAge:0});
   }
-  document.getElementById('quickBooking').addEventListener('submit', function(e){
+  document.getElementById('quickBooking').addEventListener('submit', async function(e){
+  e.preventDefault();
+
+  const name = document.getElementById('customerName').value.trim();
+  const phone = document.getElementById('customerPhone').value.trim();
+  const service = document.getElementById('serviceNeeded').value;
+  const location = document.getElementById('locationLink').value.trim();
+
+  const emailData = {
+    name: name,
+    phone: phone,
+    service: service,
+    location: location || 'Not provided yet',
+    _subject: 'NEW TOWING REQUEST - Kulma Towing Service'
+  };
+
+  try {
+    await fetch('https://formsubmit.co/ajax/Kulmatowing@gmail.com', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(emailData)
+    });
+  } catch (error) {
+    console.log('Email error:', error);
+  }
+
+  const message =
+`NEW TOWING REQUEST
+Name: ${name}
+Phone: ${phone}
+Service: ${service}
+Location: ${location || 'Not provided yet'}`;
+
+  const whatsappURL =
+    'https://wa.me/18133106432?text=' + encodeURIComponent(message);
+
+  window.open(whatsappURL, '_blank');
+});
   e.preventDefault();
 
   const name = document.getElementById('customerName').value.trim();
