@@ -277,7 +277,66 @@ Location: ${location || 'Not provided yet'}`;
   }
 });
   
+document.getElementById('fullBookingSubmit').addEventListener('click', async function(){
 
+  const name = document.querySelector('input[placeholder="Full name"]').value.trim();
+  const phone = document.querySelector('input[placeholder="Phone number"]').value.trim();
+  const vehicle = document.querySelector('input[placeholder="Year / make / model"]').value.trim();
+  const destination = document.querySelector('input[placeholder="Where should we tow it?"]').value.trim();
+  const location = document.getElementById('bookingLocation').value.trim();
+  const notes = document.querySelector('textarea[placeholder="Tell us what happened..."]').value.trim();
+
+  if (!name || !phone) {
+    alert('Please enter your name and phone number.');
+    return;
+  }
+
+  const message =
+`FULL TOWING BOOKING
+
+Name: ${name}
+Phone: ${phone}
+Vehicle: ${vehicle || 'Not provided'}
+Location: ${location || 'Not provided'}
+Destination: ${destination || 'Not provided'}
+Notes: ${notes || 'None'}`;
+
+  const whatsappURL =
+    'https://wa.me/18133106432?text=' + encodeURIComponent(message);
+
+  const whatsappWindow = window.open('about:blank', '_blank');
+
+  const emailData = {
+    Name: name,
+    Phone: phone,
+    Vehicle: vehicle || 'Not provided',
+    Location: location || 'Not provided',
+    Destination: destination || 'Not provided',
+    Notes: notes || 'None',
+    _subject: 'FULL TOWING BOOKING - Kulma Towing Service',
+    _template: 'table',
+    _captcha: 'false'
+  };
+
+  try {
+    await fetch('https://formsubmit.co/ajax/Kulmatowing@gmail.com', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(emailData)
+    });
+  } catch (error) {
+    console.error('Full booking email error:', error);
+  }
+
+  if (whatsappWindow) {
+    whatsappWindow.location.href = whatsappURL;
+  } else {
+    window.location.href = whatsappURL;
+  }
+});
 
  // Interactive animation layer
 const revealTargets = document.querySelectorAll(
