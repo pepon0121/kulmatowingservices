@@ -73,8 +73,8 @@ footer{background:#05070a;border-top:1px solid rgba(255,255,255,.1);padding:44px
       </div>
       <form class="booking-card" id="quickBooking">
         <h2>Request a Tow Now</h2><p>Share your exact location with one tap so dispatch can find you faster.</p>
-        <div class="grid2"><div class="field"><label>Name</label><input required placeholder="Your name"></div><div class="field"><label>Phone</label><input required placeholder="(000) 000-0000"></div></div>
-        <div class="field"><label>Service Needed</label><select><option>Roadside Assistance</option><option>Light & Medium Duty Towing</option><option>Long & Short Distance Towing</option><option>Specialty Towing</option><option>Accident Recovery</option><option>Flatbed Towing</option><option>Motorcycle Towing</option><option>Junk Car Pickup</option></select></div>
+        <div class="grid2"><div class="field"><label>Name</label><input id="customerName" required placeholder="Your name"></div><div class="field"><label>Phone</label><input id="customerPhone" required type="tel" placeholder="(000) 000-0000"></div></div>
+        <div class="field"><label>Service Needed</label><select id="serviceNeeded"><option>Roadside Assistance</option><option>Light & Medium Duty Towing</option><option>Long & Short Distance Towing</option><option>Specialty Towing</option><option>Accident Recovery</option><option>Flatbed Towing</option><option>Motorcycle Towing</option><option>Junk Car Pickup</option></select></div>
         <div class="field"><label>Pin Location</label><div class="location-row"><input id="locationLink" placeholder="Google Maps link appears here"><button type="button" class="btn primary mini" onclick="shareLocation('locationLink','locStatus')">📍 Share</button></div><div class="success" id="locStatus">Location link added and copied.</div></div>
         <button class="btn primary" style="width:100%;justify-content:center" type="submit">Send Booking Request</button>
       </form>
@@ -167,7 +167,25 @@ footer{background:#05070a;border-top:1px solid rgba(255,255,255,.1);padding:44px
       if(navigator.share){try{await navigator.share({title:'My towing location',text:'Here is my current location for towing service:',url:link});}catch(e){}}
     }, function(){status.style.display='block';status.textContent='Location permission denied. You can paste your address manually.';}, {enableHighAccuracy:true,timeout:12000,maximumAge:0});
   }
-  document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();alert('Demo form: connect this to email, CRM, SMS, or booking system.');}));
+  document.getElementById('quickBooking').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const name = document.getElementById('customerName').value.trim();
+  const phone = document.getElementById('customerPhone').value.trim();
+  const service = document.getElementById('serviceNeeded').value;
+  const location = document.getElementById('locationLink').value.trim();
+
+  const message =
+`NEW TOWING REQUEST
+Name: ${name}
+Phone: ${phone}
+Service: ${service}
+Location: ${location || 'Not provided yet'}`;
+
+  const whatsappURL = 'https://wa.me/18133106432?text=' + encodeURIComponent(message);
+
+  window.open(whatsappURL, '_blank');
+});
 
 
   // Interactive animation layer
